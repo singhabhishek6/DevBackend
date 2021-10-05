@@ -10,8 +10,9 @@ const hasTag = require('./controllers/hashtag.controller');
 //express midleware
 
 const app = express();
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({ origin: "https://dev-to-clone.netlify.app/", credentials: true }));
 app.use(express.json());
+app.set("trust proxy",1)
 //Passport configs
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
