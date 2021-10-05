@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 const auth = require('../midleware/auth.midleware');
 const newToken = (user) => jwt.sign({ user, exp: Math.floor(Date.now() / 1000) + (60 * 60) }, process.env.SECRET_KEY);
 const { getAll, getOne } = require('./crud.controller');
+const { findById } = require('../models/user.model');
 
 
 // function for password hasing
@@ -43,7 +44,7 @@ router.post('/register', async (req, res) => {
         if (!user) {
             return res.status(400).json({ status: 'failed', message: "Something went wrong, Please try again later" });
         }
-
+         
         return res.status(201).json({ user });
     }
     catch (err) {
@@ -67,7 +68,7 @@ router.post('/login', async (req, res) => {
 
         const token = newToken(user);
 
-        res.cookie('auth_token', token, { expires: new Date(Date.now() + 3600000), httpOnly: true });
+        res.cookie('auth_token', token, { expires: new Date(Date.now() + 3600000), httpOnly: true,secure:true });
 
         return res.status(200).json(user);
     }
@@ -142,6 +143,22 @@ router.delete('/:id', async (req, res) => {
     }
 })
 
-router.get('/:id', getOne(User));
+router.get('/:id', async (req,res)=>{
+    try{
+        let user = await User.findById(req.params.id).lean().exec();
+        user = user.following_users
+         for (let i = 0; i < user.length; i++) {
+             let element = user[i]
+             user[i] = await User.findById(element).lean().exec()
+             
+         }
+         console.log(user);
+        return res.status(200).json({user})
+    }
+    catch (err) {
+        console.log("sd");
+        return res.status(400).json({ status: "failed", message: err.message })
+    }
+});
 
 module.exports = router;
