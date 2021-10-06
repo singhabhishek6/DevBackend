@@ -68,7 +68,7 @@ router.post('/login', async (req, res) => {
 
         const token = newToken(user);
 
-        res.cookie('auth_token', token, { expires: new Date(Date.now() + 3600000), httpOnly: true,secure:true});
+        res.cookie('auth_token', token, { expires: new Date(Date.now() + 3600000), sameSite:"none",secure:true});
 
         return res.status(200).json(user);
     }
