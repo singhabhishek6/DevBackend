@@ -77,6 +77,15 @@ router.post('/login', async (req, res) => {
     }
 })
 
+router.get('/logout', async (req, res) => {
+    try {
+       res.clearCookie('auth_token').status(200);
+    }
+    catch (err) {
+        return res.status(500).send({ status: "failed", message: err.message });
+    }
+})
+
 router.patch('/:id', async (req, res) => {
     try {
         if (req.body.follower_id !== undefined) {
