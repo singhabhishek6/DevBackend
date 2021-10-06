@@ -80,8 +80,9 @@ router.post('/login', async (req, res) => {
 router.post('/logout',  (req, res) => {
     try {
     //    res.clearCookie('auth_token').status(200).json({"status":"false"});
-    res.clearCookie("auth_token");
-    return res.status(200).send("ok");
+    res.cookie('auth_token', "", { expires: new Date(Date.now() + 1), sameSite:"none",secure:true});
+    // res.clearCookie("auth_token");
+    return res.status(200).json("ok");
 
     }
     catch (err) {
