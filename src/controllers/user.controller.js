@@ -77,7 +77,7 @@ router.post('/login', async (req, res) => {
     }
 })
 
-router.get('/logout',  (req, res) => {
+router.post('/logout',  (req, res) => {
     try {
     //    res.clearCookie('auth_token').status(200).json({"status":"false"});
     res.cookie("auth_token", "", {
@@ -86,6 +86,8 @@ router.get('/logout',  (req, res) => {
         sameSite: "none",    
         expires: new Date(1)
     });
+    return res.status(500).send({ status: "failed", message: "arrived" });
+
     }
     catch (err) {
         return res.status(500).send({ status: "failed", message: err.message });
