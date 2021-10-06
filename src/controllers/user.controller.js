@@ -86,7 +86,7 @@ router.post('/logout',  (req, res) => {
         sameSite: "none",    
         expires: new Date(1)
     });
-    return res.status(500).send({ status: "failed", message: "arrived" });
+    return res.status(200).send("ok");
 
     }
     catch (err) {
